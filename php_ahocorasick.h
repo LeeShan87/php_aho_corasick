@@ -102,6 +102,6 @@ PHP_FUNCTION(ahocorasick_isValid);
 PHP_FUNCTION(ahocorasick_finalize);
 PHP_FUNCTION(ahocorasick_add_patterns);
 extern zend_module_entry ahocorasick_module_entry;
-#define phpext_hello_ptr &ahocorasick_module_entry
+#define phpext_ahocorasick_ptr &ahocorasick_module_entry
 
 #endif

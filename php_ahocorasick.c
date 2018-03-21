@@ -134,19 +134,19 @@ static inline int php_ahocorasick_dealloc_pattern(ahocorasick_pattern_t * tmpStr
     }
 
     if (!Z_ISUNDEF(tmpStruct->auxObj)){
-        zval_ptr_dtor(&(tmpStruct->auxObj));
-        ZVAL_UNDEF(&tmpStruct->auxObj);
+    	zval_ptr_dtor(&tmpStruct->auxObj);
+    	ZVAL_UNDEF(&tmpStruct->auxObj);
     }
 
     if (tmpStruct->key != NULL && !Z_ISUNDEF(tmpStruct->zKey)) {
-        zval_ptr_dtor(&(tmpStruct->zKey));
-        tmpStruct->key = NULL;
+    	zval_ptr_dtor(&tmpStruct->zKey);
+    	tmpStruct->key = NULL;
         ZVAL_UNDEF(&tmpStruct->zKey);
     }
 
     if (tmpStruct->value != NULL && !Z_ISUNDEF(tmpStruct->zVal)) {
-        zval_ptr_dtor(&(tmpStruct->zVal));
         tmpStruct->value = NULL;
+        zval_ptr_dtor(&tmpStruct->zVal);
         ZVAL_UNDEF(&tmpStruct->zVal);
     }
 
@@ -519,7 +519,7 @@ static int php_ahocorasick_match_handler(AC_MATCH_t * m, void * param)
 
         add_assoc_long(&mysubarray, "start_postion", (m->position - Z_STRLEN_P(&curPattern->zVal)));
         add_assoc_zval(&mysubarray, "value", &curPattern->zVal);
-        //Z_ADDREF_P(curPattern->zVal);
+        Z_ADDREF_P(&curPattern->zVal);
 
         // add to aggregate array
         add_next_index_zval(&myp->resultArray, &mysubarray);
@@ -702,7 +702,7 @@ PHP_FUNCTION(ahocorasick_init)
     ZVAL_RES(return_value, zend_register_resource(ahomaster, le_ahocorasick_master));
     Z_RES_P(return_value);
     // ahocorasick_pattern_t build OK.
-    // Keep in mind that we are not freeing strings allocated in memory, it is 
+    // Keep in mind that we are not freeing strings allocated in memory, it is
     // still used internally in aho structure, this free is postponed to releasing
     // aho structure.
 }
